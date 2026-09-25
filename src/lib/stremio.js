@@ -1,14 +1,20 @@
 // Stremio addon network client. Addons expose: <base>/manifest.json and
 // <base>/stream/<movie|series|anime>/<id>.json  (series episodes: <imdb>:S:E)
 export const DEFAULT_ADDONS = [
-  { url: 'https://torrentio.strem.fun', note: 'Torrents: YTS, EZTV, 1337x, TPB, NyaSi, subs' },
+  { url: 'https://watchhub.strem.io', name: 'WatchHub', note: 'Official Stremio addon for finding legitimate streaming/rental services' },
+  { url: 'https://caching.stremio.net/publicdomainmovies.now.sh', name: 'Public Domain Movies', note: 'Official public-domain movie catalog' },
+  { url: 'https://opensubtitles-v3.strem.io', name: 'OpenSubtitles v3', note: 'Official subtitle addon', subtitlesOnly: true },
 ];
 
 const LS_KEY = 'sf_addons';
 export function loadAddons() {
   try {
     const saved = JSON.parse(localStorage.getItem(LS_KEY));
-    if (Array.isArray(saved) && saved.length) return saved;
+    if (Array.isArray(saved) && saved.length) {
+      const urls = new Set(saved.map((a) => normBase(a.url)));
+      const missingDefaults = DEFAULT_ADDONS.filter((a) => !urls.has(normBase(a.url))).map((a) => ({ ...a }));
+      return [...missingDefaults, ...saved];
+    }
   } catch { /* fall through */ }
   return DEFAULT_ADDONS.map((a) => ({ ...a }));
 }
@@ -43,6 +49,7 @@ export async function fetchStremioStreams({ type, imdbId, season, episode, addon
   const list = addons && addons.length ? addons : loadAddons();
   const jobs = [];
   for (const a of list) {
+    if (a.subtitlesOnly) continue;
     const base = normBase(a.url);
     if (type === 'movie') {
       jobs.push(fetchStreamsFrom(base, `stream/movie/${imdbId}.json`).then((s) => ({ addon: a, streams: s })).catch((e) => ({ addon: a, error: String(e) })));
