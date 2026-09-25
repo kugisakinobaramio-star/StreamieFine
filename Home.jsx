@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { catalog, byCat, trending, categories } from '../data/catalog';
-import { fetchAnimeList } from '../lib/anilist';
-import { fetchCatalog } from '../lib/cinemeta';
-import { buildProfile, recommend, similarTo } from '../lib/recommend';
-import { useStore } from '../store/StoreContext';
-import { Hero, ContentRow, DetailsModal, ContinueWatching, TastePicker } from '../components/ui';
+import { catalog, byCat, trending, categories } from './data/catalog';
+import { fetchAnimeList } from './lib/anilist';
+import { fetchCatalog } from './lib/cinemeta';
+import { buildProfile, recommend, similarTo } from './lib/recommend';
+import { useStore } from './store/StoreContext';
+import { Hero, ContentRow, DetailsModal, ContinueWatching, TastePicker } from './components/ui';
 
 export default function Home() {
   const [qv, setQv] = useState(null);
