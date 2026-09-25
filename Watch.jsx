@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { resolveTitle, episodeRef } from '../lib/resolve';
-import { getServersFor, getPreferredServer, setPreferredServer } from '../lib/servers';
-import { fetchStremioStreams, loadAddons, sortStreams } from '../lib/stremio';
-import { youTubeSearch, youTubeFiles, odyseeSearch, rumbleSearchUrl, rumbleEmbed, downloadUrl } from '../lib/httpStreams';
-import { useStore } from '../store/StoreContext';
-import { mkSearchUrl, mkBrowseUrl, MK } from '../lib/mkissa';
+import { resolveTitle, episodeRef } from './lib/resolve';
+import { getServersFor, getPreferredServer, setPreferredServer } from './lib/servers';
+import { fetchStremioStreams, loadAddons, sortStreams } from './lib/stremio';
+import { youTubeSearch, youTubeFiles, odyseeSearch, rumbleSearchUrl, rumbleEmbed, downloadUrl } from './lib/httpStreams';
+import { useStore } from './store/StoreContext';
+import { mkSearchUrl, mkBrowseUrl, MK } from './lib/mkissa';
 
 const showTorrents = () => { try { return localStorage.getItem('sf_show_torrents') === '1'; } catch { return false; } };
 const safeName = (s) => (s || 'video').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-').slice(0, 60);
