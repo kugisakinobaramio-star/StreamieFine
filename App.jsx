@@ -1,11 +1,11 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { StoreProvider } from './store/StoreContext';
-import { Navbar, Footer } from './components/ui';
-import Home from './pages/Home';
-import Browse from './pages/Browse';
-import TitleDetails from './pages/TitleDetails';
-import Watch from './pages/Watch';
-import { MyList, Search, Login, Settings } from './pages/Misc';
+import { StoreProvider } from './StoreContextStoreContext';
+import { Navbar, Footer } from './ui';
+import Home from './Home';
+import Browse from './Browse';
+import TitleDetails from './TitleDetails';
+import Watch from './Watch';
+import { MyList, Search, Login, Settings } from './Misc';
 export default function App() {
   return (
     <StoreProvider>
