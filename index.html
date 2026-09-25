@@ -1,46 +1,18 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>StreamieFine — Anime, Movies, Series & Animation</title>
-<meta name="description" content="StreamieFine streaming platform">
-<style>
-*{box-sizing:border-box}body{margin:0;background:#090910;color:#f6f6fb;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}button,input{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
-.nav{position:fixed;z-index:20;top:0;left:0;right:0;padding:16px 4%;display:flex;align-items:center;gap:28px;background:linear-gradient(#050509dd,transparent)}.nav.scrolled{background:#090910ee;backdrop-filter:blur(14px);border-bottom:1px solid #ffffff12}.logo{font-size:25px;font-weight:900}.logo b{background:linear-gradient(135deg,#e50914,#8b5cf6);background-clip:text;color:transparent}.links{display:flex;gap:20px;color:#aaaabc;font-size:14px}.links a:hover{color:#fff}.search{margin-left:auto;display:flex;gap:8px;align-items:center;background:#ffffff0d;border:1px solid #ffffff14;border-radius:9px;padding:7px 10px}.search input{width:150px;background:none;border:0;outline:0;color:#fff}.avatar{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,#e50914,#7c3aed);font-weight:800}
-.hero{min-height:82vh;padding:150px 5% 70px;display:flex;align-items:end;position:relative;overflow:hidden;background:radial-gradient(circle at 75% 25%,#6124a655,transparent 35%),linear-gradient(120deg,#08080e 20%,#151023 70%,#28122b)}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#090910 0%,#09091088 48%,transparent 100%),linear-gradient(0deg,#090910 0%,transparent 45%)}.hero-content{position:relative;z-index:2;max-width:650px}.eyebrow{color:#c9c9d7;font-size:13px;letter-spacing:2px;text-transform:uppercase}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.98;margin:12px 0}.hero p{color:#c1c1cf;line-height:1.65;font-size:16px}.meta{display:flex;gap:12px;color:#aaaabc;font-size:14px;flex-wrap:wrap}.match{color:#43d17b;font-weight:800}.btns{display:flex;gap:10px;margin-top:24px}.btn{border:0;border-radius:9px;padding:11px 19px;font-weight:800}.play{background:#fff;color:#000}.ghost{background:#ffffff14;color:#fff;border:1px solid #ffffff18}
-main{padding:10px 4% 70px}.section{margin:32px 0}.section h2{margin:0 0 15px;font-size:22px}.row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(165px,1fr);gap:15px;overflow-x:auto;padding-bottom:8px}.card{background:#11111b;border:1px solid #ffffff0d;border-radius:10px;overflow:hidden;min-width:165px;transition:.2s}.card:hover{transform:translateY(-4px);border-color:#ffffff2b}.poster{height:235px;background:linear-gradient(135deg,#27273a,#15151e);display:flex;align-items:end;padding:12px;background-size:cover;background-position:center}.poster span{font-size:11px;background:#000b;padding:5px 7px;border-radius:5px}.info{padding:11px}.title{font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub{color:#9191a6;font-size:12px;margin-top:5px}.rating{color:#f6c84c}.chips{display:flex;gap:10px;overflow:auto;padding-bottom:5px}.chip{border:1px solid #ffffff15;background:#ffffff08;color:#bbbcd0;border-radius:999px;padding:8px 13px;white-space:nowrap}.chip.active,.chip:hover{background:#e50914;color:#fff;border-color:#e50914}
-footer{border-top:1px solid #ffffff0d;padding:35px 4%;color:#77778c;font-size:13px}
-.chat{position:fixed;right:20px;bottom:20px;z-index:30}.chat-toggle{border:0;border-radius:999px;width:54px;height:54px;color:#fff;background:linear-gradient(135deg,#e50914,#7c3aed);font-size:21px;box-shadow:0 10px 35px #0008}.chatbox{display:none;position:absolute;right:0;bottom:65px;width:310px;height:390px;background:#11111b;border:1px solid #ffffff16;border-radius:14px;box-shadow:0 20px 70px #000b;overflow:hidden}.chatbox.open{display:flex;flex-direction:column}.chathead{padding:13px 15px;border-bottom:1px solid #ffffff12;font-weight:800}.messages{flex:1;padding:13px;overflow:auto;color:#bbb}.msg{background:#ffffff09;border-radius:9px;padding:9px;margin-bottom:8px}.chatinput{display:flex;padding:10px;gap:7px;border-top:1px solid #ffffff12}.chatinput input{flex:1;background:#ffffff09;border:1px solid #ffffff12;border-radius:8px;color:#fff;padding:8px}.send{background:#e50914;border:0;color:#fff;border-radius:8px;padding:0 12px}
-.modal{display:none;position:fixed;inset:0;background:#000d;z-index:50;place-items:center;padding:20px}.modal.open{display:grid}.player{width:min(950px,96vw);background:#0d0d15;border:1px solid #ffffff18;border-radius:14px;overflow:hidden}.playerbar{padding:12px 15px;display:flex;justify-content:space-between}.player video{width:100%;display:block;background:#000;max-height:70vh}.close{border:0;background:#ffffff12;color:#fff;border-radius:7px;padding:6px 10px}
-@media(max-width:720px){.links{display:none}.search input{width:90px}.hero{min-height:76vh;padding-left:6%;padding-right:6%}.row{grid-auto-columns:145px}.poster{height:205px}.chatbox{width:min(310px,calc(100vw - 30px))}}
-</style>
-</head>
-<body>
-<nav class="nav" id="nav"><div class="logo">Streamie<b>Fine</b></div><div class="links"><a href="#home">Home</a><a href="#anime">Anime</a><a href="#movies">Movies</a><a href="#series">Series</a><a href="#animation">Animation</a></div><div class="search">⌕ <input id="search" placeholder="Search..."></div><div class="avatar">S</div></nav>
-<section class="hero" id="home"><div class="hero-content"><div class="eyebrow">StreamieFine Original</div><h1>Blade of the Crimson Moon</h1><div class="meta"><span class="match">98% Match</span><span>2024</span><span>TV-14</span><span>2 Seasons</span><span>4K</span></div><p>A young swordswoman inherits a cursed blade that awakens beneath a crimson moon. Hunted by demon clans, she must master its power before it consumes her.</p><div class="btns"><button class="btn play" onclick="play('Blade of the Crimson Moon')">▶ Play</button><button class="btn ghost">＋ My List</button></div></div></section>
-<main>
-<div class="section"><h2>Browse</h2><div class="chips" id="chips"><button class="chip active" data-cat="all">All</button><button class="chip" data-cat="anime">Anime</button><button class="chip" data-cat="movie">Movies</button><button class="chip" data-cat="series">Series</button><button class="chip" data-cat="animation">Animation</button></div></div>
-<div id="content"></div>
-</main>
-<footer>© 2026 StreamieFine · A fan-made streaming UI demo · Chat is optional and can be closed anytime.</footer>
-<div class="chat"><div class="chatbox" id="chatbox"><div class="chathead">StreamieFine Chat</div><div class="messages" id="messages"><div class="msg">Welcome! Talk about what you're watching.</div></div><div class="chatinput"><input id="chatinput" placeholder="Type a message…"><button class="send" onclick="send()">Send</button></div></div><button class="chat-toggle" onclick="document.getElementById('chatbox').classList.toggle('open')">💬</button></div>
-<div class="modal" id="modal"><div class="player"><div class="playerbar"><b id="playerTitle">Now Playing</b><button class="close" onclick="stop()">✕</button></div><video id="video" controls playsinline></video></div></div>
-<script>
-const V='https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/';
-const data=[
-['Blade of the Crimson Moon','anime','crimson-moon','9.1','Action • Fantasy'],['Neon Ronin','anime','neon-ronin','8.8','Sci-Fi • Action'],['Spirits of the Paper Crane','anime','paper-crane','8.6','Fantasy • Drama'],['Kaiju Academy','anime','kaiju-acad','8.3','Comedy • School'],['The Last Alchemist','anime','last-alch','9.0','Fantasy • Mystery'],['Echoes of Tomorrow','movie','echoes','8.7','Sci-Fi • Thriller'],['The Midnight Heist','movie','midnight-heist','8.2','Action • Crime'],['Whispering Pines','movie','pines','7.9','Horror • Mystery'],['Empire of Salt','movie','salt','8.9','Drama • Epic'],['The Glass Citadel','series','glass','9.3','Drama • Fantasy'],['Hollow Point','series','hollow','8.8','Crime • Thriller'],['Mars General','series','mars-gen','8.5','Sci-Fi • Drama'],['Captain Comet & Pip','animation','comet','8.7','Kids • Adventure'],['Dragon Bakery','animation','dragon-bake','9.0','Family • Fantasy'],['Robo Pals','animation','robo-pals','8.3','Kids • Sci-Fi']
-];
-const videos=[V+'Sintel.mp4',V+'BigBuckBunny.mp4',V+'ElephantsDream.mp4',V+'TearsOfSteel.mp4'];
-function card(x,i){return '<article class="card" data-title="'+x[0].toLowerCase()+'" data-cat="'+x[1]+'" onclick="play(\''+x[0].replace(/'/g,'')+'\')"><div class="poster" style="background-image:linear-gradient(0deg,#090910dd,transparent 55%),url(https://picsum.photos/seed/'+x[2]+'/400/600)"><span>'+x[1].toUpperCase()+'</span></div><div class="info"><div class="title">'+x[0]+'</div><div class="sub"><span class="rating">★ '+x[3]+'</span> · '+x[4]+'</div></div></article>'}
-function render(filter='all',q=''){let groups={anime:'Anime',movie:'Movies',series:'TV Series',animation:'Animation'};let html='';for(const cat in groups){if(filter!=='all'&&filter!==cat)continue;let arr=data.filter(x=>x[1]===cat&&(!q||x[0].toLowerCase().includes(q)));if(!arr.length)continue;html+='<div class="section" id="'+cat+'"><h2>'+groups[cat]+'</h2><div class="row">'+arr.map((x,i)=>card(x,i)).join('')+'</div></div>'}document.getElementById('content').innerHTML=html||'<div class="section"><h2>No results</h2><p class="sub">Try another search.</p></div>'}
-function play(title){document.getElementById('playerTitle').textContent=title;const v=document.getElementById('video');v.src=videos[Math.floor(Math.random()*videos.length)];document.getElementById('modal').classList.add('open');v.play().catch(()=>{})}
-function stop(){const v=document.getElementById('video');v.pause();v.src='';document.getElementById('modal').classList.remove('open')}
-function send(){const i=document.getElementById('chatinput');if(!i.value.trim())return;const m=document.getElementById('messages');m.innerHTML+='<div class="msg"><b>You</b><br>'+i.value.replace(/[<>]/g,'')+'</div>';i.value='';m.scrollTop=m.scrollHeight}
-document.getElementById('chatinput').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
-document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.cat,document.getElementById('search').value.toLowerCase())});
-document.getElementById('search').addEventListener('input',e=>render(document.querySelector('.chip.active').dataset.cat,e.target.value.toLowerCase()));
-window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>30));
-render();
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e50914'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>S</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="StreamieFine — Stream Anime, Movies, Series & Animation in HD" />
+    <title>StreamieFine — Anime, Movies, Series & Animation</title>
+    <link rel="preconnect" href="https://graphql.anilist.co" />
+    <link rel="preconnect" href="https://v3-cinemeta.strem.io" />
+    <link rel="preconnect" href="https://image.tmdb.org" />
+    <link rel="preconnect" href="https://i.ytimg.com" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
