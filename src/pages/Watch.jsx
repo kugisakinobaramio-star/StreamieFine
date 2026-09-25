@@ -25,6 +25,7 @@ export default function Watch() {
   const [yt, setYt] = useState([]);
   const [ytLoading, setYtLoading] = useState(false);
   const [ytFiles, setYtFiles] = useState({});
+  const [embedState, setEmbedState] = useState('loading');
   const [ytQuality, setYtQuality] = useState({});
   const [od, setOd] = useState([]);
   const [odLoading, setOdLoading] = useState(false);
@@ -70,7 +71,7 @@ export default function Watch() {
     const idx = servers.findIndex((s) => s.id === pref);
     if (idx > 0) setSrvIdx(idx);
   }, [item?.id, servers.length]);
-  const pickServer = (i) => { setSrvIdx(i); setDirect(null); setEmbedMain(null); if (item && servers[i]) setPreferredServer(item.category, servers[i].id); };
+  const pickServer = (i) => { setSrvIdx(i); setDirect(null); setEmbedMain(null); setEmbedState('loading'); if (item && servers[i]) setPreferredServer(item.category, servers[i].id); };
 
   const epLabel = useMemo(() => {
     if (!item || !ref) return '';
@@ -140,7 +141,7 @@ export default function Watch() {
   };
 
   const playDirect = (url, label) => { setEmbedMain(null); setDirect({ url, label }); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-  const playEmbed = (src, label) => { setDirect(null); setEmbedMain({ src, label }); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const playEmbed = (src, label) => { setDirect(null); setEmbedMain({ src, label }); setEmbedState('loading'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   const expandYt = async (v) => {
     if (ytFiles[v.videoId]) return;
     try {
@@ -199,14 +200,26 @@ export default function Watch() {
             <source src={direct.url} />
           </video>
         ) : embedMain ? (
-          <iframe key={embedMain.src} src={embedMain.src} className="player" style={{ minHeight: 480, border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; picture-in-picture" title={embedMain.label || 'embed'} />
+          <div>
+            <iframe key={embedMain.src} src={embedMain.src} className="player" style={{ minHeight: 480, border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; picture-in-picture" title={embedMain.label || 'embed'} onLoad={() => setEmbedState('loaded')} />
+            {embedState !== 'loaded' && <div className="quality-row" style={{ marginTop: 8 }}>
+              <span className="sub">If the provider blocks embedding, open its player directly:</span>
+              <a className="btn btn-ghost btn-sm" href={embedMain.src} target="_blank" rel="noopener noreferrer">Open player ↗</a>
+            </div>}
+          </div>
         ) : active?.demo ? (
           <video key={active.url} className="player" controls autoPlay preload="metadata"
             onTimeUpdate={(e) => { const v = e.currentTarget; if (v.duration) saveProgress(item.id, Math.round((v.currentTime / v.duration) * 100)); }}>
             <source src={active.url} type="video/mp4" />
           </video>
         ) : active ? (
-          <iframe key={active.url} src={active.url} className="player" style={{ minHeight: 480, border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; picture-in-picture" title={active.name} />
+          <div>
+            <iframe key={active.url} src={active.url} className="player" style={{ minHeight: 480, border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; picture-in-picture" title={active.name} onLoad={() => setEmbedState('loaded')} />
+            <div className="quality-row" style={{ marginTop: 8 }}>
+              <span className="sub">Some third-party providers refuse iframe embedding on GitHub Pages.</span>
+              <a className="btn btn-ghost btn-sm" href={active.url} target="_blank" rel="noopener noreferrer">Open player ↗</a>
+            </div>
+          </div>
         ) : <div className="empty">No servers available for this title.</div>}
 
         {(direct) && (
