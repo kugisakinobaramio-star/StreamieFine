@@ -101,7 +101,7 @@ export default function Watch() {
         });
         if (!dead) {
           const sorted = sortStreams(raw);
-          setHttpFiles(sorted.filter((s) => s.kind === 'direct'));
+          setHttpFiles(sorted.filter((s) => ['direct', 'youtube', 'external'].includes(s.kind)));
           setTorrents(sorted.filter((s) => s.kind === 'torrent'));
         }
       } catch { /* panel shows empty state */ }
@@ -254,13 +254,15 @@ export default function Watch() {
               {httpFiles.slice(0, 30).map((s, i) => (
                 <div key={i} className="ep" style={{ cursor: 'default' }}>
                   <div style={{ flex: 1 }}>
-                    <h5><span className="pill" style={{ marginRight: 8 }}>{s.quality}</span>{s.name} <span style={{ color: 'var(--mut)', fontWeight: 400 }}>• {s.addonName}</span></h5>
+                    <h5><span className="pill" style={{ marginRight: 8 }}>{s.quality}</span>{s.name} <span style={{ color: 'var(--mut)', fontWeight: 400 }}>• {s.addonName}</span>{s.kind === 'youtube' ? ' • YouTube' : s.kind === 'external' ? ' • External' : ''}</h5>
                     <p>{s.detail}{s.size ? ` • ${s.size}` : ''}</p>
                   </div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <button className="btn btn-grad btn-sm" onClick={() => playDirect(s.url, `${s.quality} • ${s.addonName}`)}>▶ Play</button>
-                    <button className="btn btn-ghost btn-sm" onClick={() => downloadUrl(s.url, dlName)}>⬇</button>
-                    <button className="btn btn-ghost btn-sm" onClick={() => navigator.clipboard?.writeText(s.url)}>Copy</button>
+                    {s.kind === 'direct' && <button className="btn btn-grad btn-sm" onClick={() => playDirect(s.url, `${s.quality} • ${s.addonName}`)}>▶ Play</button>}
+                    {s.kind === 'youtube' && <button className="btn btn-grad btn-sm" onClick={() => playEmbed(`https://www.youtube-nocookie.com/embed/${encodeURIComponent(s.ytId)}?autoplay=1`, `${s.name} • ${s.addonName}`)}>▶ Play</button>}
+                    {s.kind === 'external' && <a className="btn btn-grad btn-sm" href={s.externalUrl} target="_blank" rel="noopener noreferrer">▶ Open</a>}
+                    {s.kind === 'direct' && <button className="btn btn-ghost btn-sm" onClick={() => downloadUrl(s.url, dlName)}>⬇</button>}
+                    {(s.url || s.externalUrl) && <button className="btn btn-ghost btn-sm" onClick={() => navigator.clipboard?.writeText(s.url || s.externalUrl)}>Copy</button>}
                   </div>
                 </div>
               ))}
