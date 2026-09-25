@@ -164,6 +164,12 @@ export function Settings() {
       </div>
       {msg && <p className="sub" style={{ marginTop: 12 }}>{msg}</p>}
       <div className="side-box" style={{ marginTop: 22 }}>
+        <h4>🎞 Pexels video source</h4>
+        <p>Pexels provides a free video API. Add your own API key to enable the Pexels tab on watch pages. The key is stored only in this browser.</p>
+        <div className="field"><label>Pexels API key</label><input type="password" value={localStorage.getItem('sf_pexels_key') || ''} onChange={(e) => { try { localStorage.setItem('sf_pexels_key', e.target.value); } catch {} setMsg('Pexels key saved locally.'); }} placeholder="Paste your Pexels API key" /></div>
+        <p className="sub">You can request a key from Pexels. Keep it private and do not commit it to GitHub.</p>
+      </div>
+      <div className="side-box" style={{ marginTop: 22 }}
         <h4>How to get more sources</h4>
         <p>1. Open your Stremio addon (Torrentio / MediaFusion / Comet) configure page.<br />2. Pick providers + Debrid options, click Install — copy the manifest URL.<br />3. Strip everything after the host config path and paste the base URL here.<br />Debrid (Real-Debrid / Premiumize) links play instantly; plain torrents show as magnets.</p>
       </div>
