@@ -3,7 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { resolveTitle, episodeRef } from '../lib/resolve';
 import { getServersFor, getPreferredServer, setPreferredServer } from '../lib/servers';
 import { fetchStremioStreams, loadAddons, sortStreams } from '../lib/stremio';
-import { youTubeSearch, youTubeFiles, odyseeSearch, rumbleSearchUrl, rumbleEmbed, downloadUrl } from '../lib/httpStreams';
+import { youTubeSearch, youTubeFiles, odyseeSearch, rumbleSearchUrl, rumbleEmbed, pexelsSearch, downloadUrl } from '../lib/httpStreams';
 import { useStore } from '../store/StoreContext';
 import { mkSearchUrl, mkBrowseUrl, MK } from '../lib/mkissa';
 
@@ -30,6 +30,8 @@ export default function Watch() {
   const [od, setOd] = useState([]);
   const [odLoading, setOdLoading] = useState(false);
   const [rumbleUrl, setRumbleUrl] = useState('');
+  const [px, setPx] = useState([]);
+  const [pxLoading, setPxLoading] = useState(false);
   const [rumbleErr, setRumbleErr] = useState('');
   const { saveProgress } = useStore();
 
@@ -40,7 +42,7 @@ export default function Watch() {
   useEffect(() => {
     let dead = false;
     setItem(null); setErr(null); setDirect(null); setEmbedMain(null); setSrvIdx(0);
-    setHttpFiles([]); setTorrents([]); setYt([]); setYtFiles({}); setOd([]);
+    setHttpFiles([]); setTorrents([]); setYt([]); setYtFiles({}); setOd([]); setPx([]);
     (async () => {
       try {
         const it = await resolveTitle(id, sp.get('t'));
@@ -130,6 +132,13 @@ export default function Watch() {
     return () => { dead = true; };
   }, [tab, item]);
 
+  useEffect(() => {
+    if (tab !== 'pexels' || !item || px.length || pxLoading) return;
+    let dead = false; setPxLoading(true);
+    pexelsSearch(queries.episode, 12).then((r) => { if (!dead) setPx(r); }).catch(() => { if (!dead) setPx([]); }).finally(() => { if (!dead) setPxLoading(false); });
+    return () => { dead = true; };
+  }, [tab, item, queries.episode]);
+
   const gotoEp = (season, episode) => {
     setDirect(null); setEmbedMain(null); setSrvIdx(0); setYt([]); setOd([]);
     setSp((p) => {
@@ -168,7 +177,7 @@ export default function Watch() {
   const isManga = item.category === 'manga';
   const tabs = isManga
     ? [['mkissa', '📚 MKissa']]
-    : [['servers', 'Servers'], ['http', `HTTP Files${httpFiles.length ? ` (${httpFiles.length})` : ''}`], ['youtube', 'YouTube'], ['odysee', 'Odysee'], ['rumble', 'Rumble'], ['mkissa', 'MKissa']];
+    : [['servers', 'Servers'], ['http', `HTTP Files${httpFiles.length ? ` (${httpFiles.length})` : ''}`], ['youtube', 'YouTube'], ['pexels', 'Pexels'], ['odysee', 'Odysee'], ['rumble', 'Rumble'], ['mkissa', 'MKissa']];
 
   return (
     <div className="watch-wrap">
@@ -314,6 +323,23 @@ export default function Watch() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {tab === 'pexels' && (
+          <div>
+            {pxLoading && <p className="sub">Searching Pexels…</p>}
+            {!pxLoading && !px.length && <p className="sub">No Pexels results. Add your Pexels API key in Settings.</p>}
+            <div style={{ display: 'grid', gap: 10 }}>
+              {px.map((v) => <div key={v.id} className="ep" style={{ cursor: 'default' }}>
+                {v.thumb && <img src={v.thumb} alt="" style={{ width: 150, objectFit: 'cover' }} />}
+                <div style={{ flex: 1 }}><h5>{v.title}</h5><p>Pexels{v.duration ? ` • ${Math.round(v.duration)}s` : ''}</p></div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {v.files[0] && <button className="btn btn-grad btn-sm" onClick={() => playDirect(v.files[0].url, `Pexels • ${v.title}`)}>▶ Play</button>}
+                  <a className="btn btn-ghost btn-sm" href={v.page} target="_blank" rel="noreferrer">Pexels ↗</a>
+                </div>
+              </div>)}
             </div>
           </div>
         )}
