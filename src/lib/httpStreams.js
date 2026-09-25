@@ -54,19 +54,6 @@ export async function pixabaySearch(query, perPage = 12) {
     page: v.pageURL,
   }));
 }
-export function getPexelsApiKey() { try { return localStorage.getItem('sf_pexels_key') || ''; } catch { return ''; } }
-export async function pexelsSearch(query, perPage = 12) {
-  const key = getPexelsApiKey();
-  if (!key) throw new Error('Pexels API key is not configured');
-  const r = await fetch(`https://api.pexels.com/v1/videos/search?query=${encodeURIComponent(query)}&per_page=${Math.min(Math.max(perPage, 3), 20)}`, { headers: { Authorization: key } });
-  if (!r.ok) throw new Error('Pexels request failed');
-  const j = await r.json();
-  return (j.videos || []).map((v) => ({
-    id: v.id, title: v.user?.name ? `Pexels • ${v.user.name}` : 'Pexels video', duration: v.duration || 0,
-    thumb: v.image || '', page: v.url,
-    files: (v.video_files || []).filter((f) => f.link).map((f) => ({ quality: f.quality || 'video', url: f.link, width: f.width, height: f.height, fps: f.fps, size: null })),
-  }));
-}
 export const rumbleSearchUrl = (q) => `https://rumble.com/search/video?q=${encodeURIComponent(q)}`;
 export async function rumbleEmbed(rawUrl) { const m=/rumble\.com\//.exec(rawUrl||''); if(!m) throw new Error('Not a Rumble URL'); const r=await fetch(`https://rumble.com/api/Media/oEmbed.json?url=${encodeURIComponent(rawUrl)}`); if(!r.ok) throw new Error('oEmbed failed'); const j=await r.json(); const src=/src="([^"]+)"/.exec(j.html||'')?.[1]; if(!src) throw new Error('No embed found'); return {title:j.title,embed:src,author:j.author_name}; }
 export function downloadUrl(url, filename) { const a=document.createElement('a'); a.href=url; a.download=filename||'streamiefine-video.mp4'; a.target='_blank'; a.rel='noreferrer'; document.body.appendChild(a); a.click(); a.remove(); }
