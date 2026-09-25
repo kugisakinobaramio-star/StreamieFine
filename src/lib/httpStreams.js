@@ -38,6 +38,22 @@ export async function odyseeSearch(query, size = 12) {
   try { const r = await fetch(`https://lighthouse.odysee.com/search?s=${encodeURIComponent(query)}&size=${size}&from=0`, { signal: ctl.signal }); if (!r.ok) throw new Error('HTTP ' + r.status); const j = await r.json(); return (Array.isArray(j) ? j : []).filter((c) => c.name && c.claimId).map((c) => ({ name:c.name,claimId:c.claimId,title:prettify(c.name),embed:`https://odysee.com/$/embed/${c.name}:${c.claimId}`,page:`https://odysee.com/${c.name}:${c.claimId}` })); } finally { clearTimeout(t); }
 }
 function prettify(name) { return decodeURIComponent(name).replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim().replace(/\b\w/g,(c)=>c.toUpperCase()).slice(0,90); }
+export async function pixabaySearch(query, perPage = 12) {
+  const url = `https://pixabay.com/api/videos/?q=${encodeURIComponent(query)}&per_page=${Math.min(Math.max(perPage, 3), 20)}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('Pixabay API requires a configured API key');
+  const j = await r.json();
+  return (j.hits || []).map((v) => ({
+    id: v.id,
+    title: v.tags || 'Pixabay video',
+    duration: v.duration || 0,
+    thumb: v.videos?.tiny?.thumbnail || v.videos?.small?.thumbnail || '',
+    files: Object.entries(v.videos || {}).filter(([, f]) => f?.url).map(([quality, f]) => ({
+      quality, url: f.url, width: f.width, height: f.height, size: f.size || null,
+    })),
+    page: v.pageURL,
+  }));
+}
 export const rumbleSearchUrl = (q) => `https://rumble.com/search/video?q=${encodeURIComponent(q)}`;
 export async function rumbleEmbed(rawUrl) { const m=/rumble\.com\//.exec(rawUrl||''); if(!m) throw new Error('Not a Rumble URL'); const r=await fetch(`https://rumble.com/api/Media/oEmbed.json?url=${encodeURIComponent(rawUrl)}`); if(!r.ok) throw new Error('oEmbed failed'); const j=await r.json(); const src=/src="([^"]+)"/.exec(j.html||'')?.[1]; if(!src) throw new Error('No embed found'); return {title:j.title,embed:src,author:j.author_name}; }
 export function downloadUrl(url, filename) { const a=document.createElement('a'); a.href=url; a.download=filename||'streamiefine-video.mp4'; a.target='_blank'; a.rel='noreferrer'; document.body.appendChild(a); a.click(); a.remove(); }
