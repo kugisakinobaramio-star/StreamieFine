@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { byCat } from '../data/catalog';
-import { resolveTitle } from '../lib/resolve';
-import { fetchAnimeList } from '../lib/anilist';
-import { mkSearchUrl, mkBrowseUrl } from '../lib/mkissa';
-import { fetchCatalog } from '../lib/cinemeta';
-import { useStore } from '../store/StoreContext';
-import { ContentRow, DetailsModal } from '../components/ui';
+import { byCat } from './data/catalog';
+import { resolveTitle } from './lib/resolve';
+import { fetchAnimeList } from './lib/anilist';
+import { mkSearchUrl, mkBrowseUrl } from './lib/mkissa';
+import { fetchCatalog } from './lib/cinemeta';
+import { useStore } from './store/StoreContext';
+import { ContentRow, DetailsModal } from './components/ui';
 
 export default function TitleDetails() {
   const { id } = useParams();
