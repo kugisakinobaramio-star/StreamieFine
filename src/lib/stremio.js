@@ -84,6 +84,7 @@ export function normalizeStream(s, addon) {
   const isDirect = typeof s.url === 'string' && /^https?:\/\//.test(s.url);
   const isTorrent = !!s.infoHash;
   const isYouTube = !!s.ytId;
+  const externalUrl = typeof s.externalUrl === 'string' && /^https?:\/\//.test(s.externalUrl) ? s.externalUrl : null;
   const name = (s.name || '').replace(/\n/g, ' ').trim();
   const { seeders, size, first } = parseTorrentTitle(s.title || s.description || '');
   const quality = /2160|4k/i.test(name + ' ' + first) ? '4K' : /1080/i.test(name + ' ' + first) ? '1080p' : /720/i.test(name + ' ' + first) ? '720p' : /480/i.test(name + ' ' + first) ? '480p' : (s.quality || '—');
@@ -91,9 +92,10 @@ export function normalizeStream(s, addon) {
     raw: s, addonName: addon?.name || addon?.url || 'addon',
     addonUrl: addon?.url, name: name || 'Stream', detail: first,
     quality, seeders, size,
-    kind: isDirect ? 'direct' : isTorrent ? 'torrent' : isYouTube ? 'youtube' : 'other',
+    kind: isDirect ? 'direct' : isTorrent ? 'torrent' : isYouTube ? 'youtube' : externalUrl ? 'external' : 'other',
     url: isDirect ? s.url : null,
     ytId: s.ytId || null,
+    externalUrl,
     infoHash: s.infoHash || null,
     magnet: s.infoHash ? `magnet:?xt=urn:btih:${s.infoHash}` : null,
     subtitles: s.subtitles || [],
