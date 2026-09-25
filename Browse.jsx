@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { byCat, categories } from '../data/catalog';
-import { fetchAnimeList, ANIME_SORTS } from '../lib/anilist';
-import { fetchCatalog } from '../lib/cinemeta';
-import { TitleCard, DetailsModal } from '../components/ui';
+import { byCat, categories } from './data/catalog';
+import { fetchAnimeList, ANIME_SORTS } from './lib/anilist';
+import { fetchCatalog } from './lib/cinemeta';
+import { TitleCard, DetailsModal } from './components/ui';
 
 const ANIME_GENRES = ['All', 'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Mystery', 'Psychological', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports', 'Supernatural', 'Thriller'];
 
