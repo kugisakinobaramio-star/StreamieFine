@@ -20,7 +20,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
+      - name: Validate build output
+        run: |
+          test -f dist/index.html
+          grep -q "StreamieFine" dist/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -33,3 +40,15 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Smoke test deployed site
+        run: |
+          url="${{ steps.deployment.outputs.page_url }}"
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsSL "$url" | grep -q "StreamieFine"; then
+              echo "Deployment smoke test passed: $url"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Deployment smoke test failed: $url"
+          exit 1
